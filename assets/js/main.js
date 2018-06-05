@@ -32,18 +32,19 @@ $(document).on("submit", "form.js-register", function (event) {
             async: true
         })
         .done(function ajaxDone(data) {
-            console.log(data);
             if (data.redirect !== undefined) {
                 window.location = data.redirect;
+            } else if (data.error !== undefined) {
+                _error
+                    .text(data.error)
+                    .show();
             }
-
-            alert(data.name);
         })
         .fail(function ajaxFailed(e) {
-            console.log(e);
+
         })
         .always(function ajaxAlwaysDoThis(data) {
-            console.log('Always');
+
         })
 
     return false;
