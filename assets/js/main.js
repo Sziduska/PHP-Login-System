@@ -103,9 +103,3 @@ $(document)
 
         return false;
     })
-    .ready(function () {
-        $('#btn-logout').on('click', function () {
-            window.location = "/Section16_Login_Registration/php_login_course/logout.php";
-            console.log('KUKUCS');
-        })
-    })

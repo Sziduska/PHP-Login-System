@@ -5,6 +5,19 @@
     require_once "inc/config.php";
 
     ForceLogin();
+    
+    $user_id = $_SESSION['user_id'];
+    $getUserInfo = $con->prepare("SELECT email, reg_time FROM users WHERE user_id = :user_id LIMIT 1");
+    $getUserInfo->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+    $getUserInfo->execute();
+
+    if($getUserInfo -> rowCount() == 1) {
+        //user was found
+        $User = $getUserInfo->fetch(PDO::FETCH_ASSOC);
+    } else {
+        //user does not exists
+        header("location: /Section16_Login_Registration/php_login_course/logout.php"); exit;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -29,9 +42,9 @@
 
 <body>
     <div class="uk-section uk-container">
-        <div class="uk-margin">
-            <input class="uk-button uk-button-default" id="btn-logout" type="button" value="Logout">
-        </div>
+        <h2>Dashboard</h2>
+        <p>Hello <?php echo $User['email']; ?>, you registered at <?php echo $User['reg_time']; ?></p>
+        <p><a href="/Section16_Login_Registration/php_login_course/logout.php">Logout</a></p>
     </div>
 
     <?php require_once "inc/footer.php"; ?>
