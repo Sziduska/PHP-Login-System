@@ -11,19 +11,14 @@
         $return=[];
         
         $email = Filter::String($_POST['email']);
-        $password = $_POST['password'];
-        
-        //Make sure the user does not exists
-        $findUser = $con->prepare("SELECT user_id, password FROM users WHERE email = LOWER(:email) LIMIT 1");
-        $findUser->bindParam(':email', $email, PDO::PARAM_STR);
-        $findUser->execute();
-        
-        if($findUser->rowCount() == 1){
-            //User exists; try and sign them in
-            $User = $findUser->fetch(PDO::FETCH_ASSOC);
+        $password = $_POST['password'];       
             
-            $user_id = (int) $User['user_id'];            
-            $hash = (string) $User['password'];
+        $user_found = User::Find($email, true);
+        
+        if($user_found){
+            //User exists; try and sign them in
+            $user_id = (int) $user_found['user_id'];            
+            $hash = (string) $user_found['password'];
             
             //Decrypt password
             if(password_verify($password, $hash)) {
@@ -38,18 +33,11 @@
         } else {
             //User does not exists, they need to create a new account
             $return['error'] = "You do not have an account. <a href='/Section16_Login_Registration/php_login_course/register.php'>Create one now?</a>";
-            $return['is_logged_in'] = false;
         }
-        
-        //Make sure the user CAN be added AND is added
-        
-        //Return the proper information back to JavaScript to redirect us
         
         echo json_encode($return, JSON_PRETTY_PRINT); exit;
     } else {        
         //Die. Kill the script. Redirect the user. Do something regardless.
         exit('Invalid URL');
     }
-
-    
 ?>
