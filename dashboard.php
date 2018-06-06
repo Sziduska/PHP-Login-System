@@ -29,8 +29,9 @@
 
 <body>
     <div class="uk-section uk-container">
-        HERE I AM <br/>
-        You are signed in as: <?php echo $_SESSION['user_id']; ?>
+        <div class="uk-margin">
+            <input class="uk-button uk-button-default" id="btn-logout" type="button" value="Logout">
+        </div>
     </div>
 
     <?php require_once "inc/footer.php"; ?>
